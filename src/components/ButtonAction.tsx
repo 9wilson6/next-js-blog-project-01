@@ -25,14 +25,21 @@ const ButtonAction: FC<ButtonActionProps> = ({ id }) => {
   });
   return (
     <div>
-      <Link href={"/edit/id"} className="btn mr-2">
+      <Link href={`/edit/${id}`} className="btn mr-2">
         <Pencil />
         Edit Post
       </Link>
       <button onClick={() => deletePost()} className="btn btn-error">
         {isLoading && <span className="loading loading-spinner"></span>}
-        <Trash />
-        Delete
+        {isLoading ? (
+          "Loading...."
+        ) : (
+          <>
+            {" "}
+            <Trash />
+            Delete
+          </>
+        )}
       </button>
     </div>
   );

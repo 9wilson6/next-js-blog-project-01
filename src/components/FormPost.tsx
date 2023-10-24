@@ -9,9 +9,18 @@ import { SubmitHandler, useForm } from "react-hook-form";
 interface FormPostProps {
   submit: SubmitHandler<FormInputPost>;
   isEditing: boolean;
+  initialValue?: FormInputPost;
+  isLoadingSubmit: boolean;
 }
-const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
-  const { register, handleSubmit } = useForm<FormInputPost>();
+const FormPost: FC<FormPostProps> = ({
+  submit,
+  isEditing,
+  initialValue,
+  isLoadingSubmit,
+}) => {
+  const { register, handleSubmit } = useForm<FormInputPost>({
+    defaultValues: initialValue,
+  });
 
   //fetch list tags
   const { data: dataTags, isLoading: isLoadingTags } = useQuery<Tag[]>({
@@ -57,7 +66,14 @@ const FormPost: FC<FormPostProps> = ({ submit, isEditing }) => {
       )}
 
       <button type="submit" className="btn btn-primary w-full max-w-lg">
-        {isEditing ? "Update Post" : " Create Post"}
+        {isLoadingSubmit && <span className="loading loading-spinner"></span>}
+        {isEditing
+          ? isLoadingSubmit
+            ? "Updating..."
+            : "Update"
+          : isLoadingSubmit
+          ? "Creating..."
+          : "Create"}
       </button>
     </form>
   );
